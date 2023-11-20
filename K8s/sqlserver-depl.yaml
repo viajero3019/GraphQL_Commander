@@ -1,21 +1,21 @@
-apiVersion: apps/v1
+appiVersion: apps/v1
 kind: Deployment
-metadata: 
-  name: mssql-depl
+metadata:
+  name: sqlserver-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mssql
+      app: sqlserver
   template:
     metadata:
       labels:
-        app: mssql
+        app: sqlserver
     spec:
       containers:
-        - name: mssql
+        - name: sqlserver
           image: mcr.microsoft.com/mssql/server:2017-latest
-          ports:
+          ports: 
             - containerPort: 1433
           env:
           - name: MSSQL_PID
@@ -25,38 +25,38 @@ spec:
           - name: SA_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: mssql
+                name: sqlserver
                 key: SA_PASSWORD
           volumeMounts:
-          - mountPath: /var/opt/mssql/data
-            name: mssqldb
+          - mountPath: /var/opt/sqlserver/data
+            name: sqlserverdb
       volumes:
-      - name: mssqldb
+      - name: sqlserver
         persistentVolumeClaim:
-          claimName: mssql-claim
+          claimName: sqlserver-claim
 ---
 apiVersion: v1
 kind: Service
 metadata: 
-  name: mssql-clusterip-srv
+  name: sqlserver-clusterip-srv
 spec: 
   type: ClusterIP
   selector: 
-    app: mssql
+    app: sqlserver
   ports:
-  - name: mssql
+  - name: sqlserver
     protocol: TCP
     port: 1433
-    targetPort: 1433
+    targetPort: 1433 
 ---
 apiVersion: v1
 kind: Service
 metadata: 
-  name: mssql-loadbalancer
+  name: sqlserver-loadbalancer
 spec: 
   type: LoadBalancer
   selector: 
-    app: mssql
+    app: sqlserver
   ports:
   - protocol: TCP
     port: 1433
