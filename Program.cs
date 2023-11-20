@@ -13,15 +13,19 @@ builder.Services.AddPooledDbContextFactory<AppDbContext>(opt => opt.UseSqlServer
 builder.Services.AddGraphQLServer()
     .AddQueryType<GQuery>()
     .AddMutationType<Mutation>()
+    .AddSubscriptionType<Subscription>()
     .AddType<PlatformType>()
     .AddType<CommandType>()
     .AddProjections()
     .AddFiltering()
-    .AddSorting();
+    .AddSorting()
+    .AddInMemorySubscriptions();
 
 builder.Configuration.GetConnectionString("");
 
 var app = builder.Build();
+
+app.UseWebSockets();
 
 app.UseRouting();
 
