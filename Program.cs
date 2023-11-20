@@ -2,13 +2,21 @@ using CommanderGQL.Data;
 using CommanderGQL.GraphQL;
 using Microsoft.EntityFrameworkCore;
 using GraphQL.Server.Ui.Voyager;
+using CommanderGQL.GraphQL.Platforms;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // AddPooledDbContextFactory allows us to create DbContext and pooled instances for reuse
 builder.Services.AddPooledDbContextFactory<AppDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("CommandsConStr")));
 
-builder.Services.AddGraphQLServer().AddQueryType<GQuery>().AddProjections();
+builder.Services.AddGraphQLServer()
+    .AddQueryType<GQuery>()
+    .AddType<PlatformType>()
+    .AddType<CommandType>()
+    .AddProjections()
+    .AddFiltering()
+    .AddSorting();
 
 builder.Configuration.GetConnectionString("");
 

@@ -15,3 +15,27 @@ INSERT INTO CommandsDB.dbo.Commands VALUES ('Stop a docker compose file', 'docke
 
 
 http://localhost:5165/graphql/
+
+
+////////////////// Filtering Query
+query{
+	command(where: {platformId: {eq: 2}})
+	{
+		id		
+		platform{
+			name
+		}
+		commandLine
+		howTo
+	}
+}
+
+
+////////////////// Sorting Query
+query{
+	platform(order: {name: DESC})
+	{
+		name
+	}
+}
+
