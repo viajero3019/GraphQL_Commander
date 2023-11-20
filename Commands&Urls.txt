@@ -1,0 +1,17 @@
+dotnet new web -n CommanderGQL --framework net6.0  
+
+dotnet ef migrations add AddPlatformToDB
+dotnet ef database update
+dotnet ef migrations add AddCommandToDB
+
+INSERT INTO CommandsDB.dbo.Platforms VALUES ('.Net6', '528282389')
+INSERT INTO CommandsDB.dbo.Platforms VALUES ('Docker', '2524245')
+INSERT INTO CommandsDB.dbo.Platforms VALUES ('Windows', '654654564')
+
+INSERT INTO CommandsDB.dbo.Commands VALUES ('Build a project', 'dotnet build', 1)
+INSERT INTO CommandsDB.dbo.Commands VALUES ('Run a project', 'dotnet run', 1)
+INSERT INTO CommandsDB.dbo.Commands VALUES ('Start a docker compose file', 'docker-compose up -d', 2)
+INSERT INTO CommandsDB.dbo.Commands VALUES ('Stop a docker compose file', 'docker-compose stop', 2)
+
+
+http://localhost:5165/graphql/
